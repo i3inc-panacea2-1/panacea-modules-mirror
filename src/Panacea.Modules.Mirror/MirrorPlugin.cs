@@ -1,4 +1,6 @@
 ﻿using Panacea.Core;
+using Panacea.Models;
+using Panacea.Modularity.Billing;
 using Panacea.Modularity.UiManager;
 
 using System;
@@ -18,12 +20,26 @@ namespace Panacea.Modules.Mirror
             _core = core;
             _logger = core.Logger;
         }
-        public void Call()
+        public async void Call()
         {
             //todo _websocket.PopularNotifyPage("Mirror");
             if (_core.TryGetUiManager(out IUiManager ui))
             {
-                ui.Navigate(new MirrorPageViewModel(_core));
+                if(_core.TryGetBilling(out IBillingManager billing))
+                {
+                    if (billing.IsPluginFree("Mirror"))
+                    {
+                        ui.Navigate(new MirrorPageViewModel(_core));
+                    }
+                    else
+                    {
+                        if(await billing.ConsumeItemAsync("Mirror", new ServerItem()))
+                        {
+                            ui.Navigate(new MirrorPageViewModel(_core));
+                        }
+                    }
+                }
+                
             }
         }
 
