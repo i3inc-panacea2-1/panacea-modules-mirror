@@ -33,7 +33,7 @@ namespace Panacea.Modules.Mirror
                     }
                     else
                     {
-                        var service = await billing.GetServiceAsync("Mirror requires service.", "Mirror");
+                        var service = await billing.GetOrRequestServiceAsync("Mirror requires service.", "Mirror");
                         if (service != null)
                         {
                             ui.Navigate(new MirrorPageViewModel(_core));
