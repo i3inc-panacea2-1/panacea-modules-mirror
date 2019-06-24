@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Panacea.Modules.Meditech
+namespace Panacea.Modules.Mirror
 {
     /// <summary>
     /// Interaction logic for App.xaml
