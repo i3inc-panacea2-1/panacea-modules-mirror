@@ -14,10 +14,12 @@ namespace Panacea.Modules.Mirror
     [View(typeof(MirrorPage))]
     class MirrorPageViewModel:ViewModelBase
     {
+        private readonly string _deviceName;
         private readonly PanaceaServices _core;
         ILogger _logger;
-        public MirrorPageViewModel(PanaceaServices core)
+        public MirrorPageViewModel(PanaceaServices core, string deviceName)
         {
+            _deviceName = deviceName;
             _core = core;
             _logger = core.Logger;
             try
@@ -88,12 +90,12 @@ namespace Panacea.Modules.Mirror
                     return;
                 }
                 DsDevice selectedDevice = null;
-                if (!string.IsNullOrEmpty("" /*todo Host.MirrorDevice*/))
+                if (!string.IsNullOrEmpty(_deviceName))
                 {
                     foreach (var ds in allVideoDevices)
                     {
                         _logger.Debug(this, "Mirror device: " + ds.Name);
-                        if ("" /*todo Host.MirrorDevice*/.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Contains(ds.Name)) selectedDevice = ds;
+                        if (_deviceName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Contains(ds.Name)) selectedDevice = ds;
                     }
                 }
                 if (allCameras.Length > 0 && selectedDevice == null)
